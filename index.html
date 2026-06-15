@@ -1,17 +1,20 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <link rel="icon" type="image/x-icon" href="https://fujiwavietnam.vn/favicon.ico">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fujiwa Việt Nam - Tinh Hoa Nước Uống Từ Nhật Bản</title>
+    
+    <!-- Website Favicon (Icon trên Tab trình duyệt giống như trong ảnh image_bb3cc7.png) -->
+    <link rel="icon" type="image/x-icon" href="https://fujiwavietnam.vn/favicon.ico">
+    
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Google Font Inter chuẩn tiếng Việt cực đẹp -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Montserrat:wght@800;900&family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,800&display=swap" rel="stylesheet">
     
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -230,8 +233,8 @@
                         
                         <!-- Left Content Column -->
                         <div class="lg:col-span-7 xl:col-span-8 text-white space-y-6">
-                            <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight leading-none text-white drop-shadow-sm">
-                                FUJIWA – TINH HOA <br>TỪ NHẬT BẢN
+                            <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight leading-none text-white drop-shadow-sm" style="font-family: 'Montserrat', sans-serif; letter-spacing: -0.01em;">
+                                FUJIWA – <span class="italic text-cyan-200 font-extrabold" style="font-family: 'Playfair Display', serif; text-transform: none;">Tinh hoa</span> <br>TỪ NHẬT BẢN
                             </h1>
                             
                             <div class="space-y-4 text-xs sm:text-sm text-cyan-50/90 font-medium leading-relaxed drop-shadow-sm">
@@ -692,7 +695,7 @@
                                 <strong class="text-slate-800 font-semibold">Nhà máy:</strong> Nhà máy Fujiwa – 286 Hồ Văn Tắng, Ấp Phú Lợi, Xã Củ Chi, Tp. Hồ Chí Minh
                             </p>
                             <p class="leading-relaxed">
-                                <strong class="text-slate-800 font-semibold">Hotline:</strong> 19006759 – 0901 661 789
+                                <strong class="text-slate-800 font-semibold">Hotline:</strong> 19008462 – 0901 661 789
                             </p>
                             <p class="leading-relaxed">
                                 <strong class="text-slate-800 font-semibold">Email:</strong> 8462D5@fujiwavietnam.vn
@@ -1172,7 +1175,7 @@
                 </div>
             </a>
             <!-- Hotline -->
-            <a href="tel:19006759" class="flex items-center space-x-2 bg-white px-3 py-2 rounded-full shadow-lg border border-cyan-100 hover:scale-105 transition-all group">
+            <a href="tel:19008462" class="flex items-center space-x-2 bg-white px-3 py-2 rounded-full shadow-lg border border-cyan-100 hover:scale-105 transition-all group">
                 <span class="text-xs font-bold text-slate-700 hidden md:block">1900 8462</span>
                 <div class="w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-md animate-bounce">
                     <i data-lucide="phone-call" class="w-5 h-5"></i>
@@ -1187,7 +1190,7 @@
 
     <!-- Left Pulsing Call Button as seen in image_1830fa.jpg & image_17da67.jpg -->
     <div class="fixed left-6 bottom-6 z-[999] hidden sm:block">
-        <a href="tel:19006759" class="relative flex items-center justify-center">
+        <a href="tel:19008462" class="relative flex items-center justify-center">
             <div class="absolute w-16 h-16 bg-cyan-400 rounded-full animate-ping opacity-40"></div>
             <div class="absolute w-20 h-20 bg-cyan-300 rounded-full animate-pulse opacity-20"></div>
             <div class="w-14 h-14 rounded-full bg-cyan-600 hover:bg-cyan-500 text-white flex items-center justify-center shadow-2xl relative z-10 hover:scale-110 transition-transform">
@@ -1199,7 +1202,7 @@
     <!-- Toast popup notification container -->
     <div id="toast-container" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-[10000] space-y-2 pointer-events-none"></div>
 
-   <script>
+ <script>
         // Danh sách sản phẩm của Fujiwa, đã bổ sung thêm sản phẩm mới chuẩn và toàn bộ đã được giảm thêm 5%
         const FujiwaProducts = [
             {
@@ -1469,8 +1472,6 @@
                 imageType: "thanh-khiet-19l"
             }
         ];
-
-
 
         let AppState = {
             currentTab: 'home',
