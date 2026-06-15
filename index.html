@@ -186,6 +186,38 @@
         <!-- 1. HOME VIEW (TRANG CHỦ) -->
         <section id="view-home" class="view-panel">
             
+            <!-- Brand Promo Image Slider (Carousel) -->
+            <div class="relative w-full overflow-hidden aspect-[21/9] sm:aspect-[24/10] md:aspect-[3/1] lg:aspect-[21/7] xl:aspect-[21/6.2] border-b border-slate-200">
+                <!-- Slides wrapper -->
+                <div id="home-slides-container" class="relative w-full h-full bg-slate-100">
+                    <!-- Slide 1 -->
+                    <div class="home-slide absolute inset-0 opacity-0 transition-opacity duration-1000 ease-in-out">
+                        <img src="https://bizweb.dktcdn.net/100/448/480/themes/852397/assets/slider_4.jpg?1753410847659" alt="Fujiwa Banner 1" class="w-full h-full object-cover">
+                    </div>
+                    <!-- Slide 2 -->
+                    <div class="home-slide absolute inset-0 opacity-0 transition-opacity duration-1000 ease-in-out">
+                        <img src="https://bizweb.dktcdn.net/100/448/480/themes/852397/assets/slider_1.jpg?1753410847659" alt="Fujiwa Banner 2" class="w-full h-full object-cover">
+                    </div>
+                    <!-- Slide 3 -->
+                    <div class="home-slide absolute inset-0 opacity-0 transition-opacity duration-1000 ease-in-out">
+                        <img src="https://bizweb.dktcdn.net/100/448/480/themes/852397/assets/slider_2.jpg?1753410847659" alt="Fujiwa Banner 3" class="w-full h-full object-cover">
+                    </div>
+                </div>
+                <!-- Navigation Arrows -->
+                <button onclick="prevHomeSlide()" class="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-slate-900/35 hover:bg-cyan-600 hover:scale-105 text-white flex items-center justify-center transition-all z-20 shadow-md">
+                    <i data-lucide="chevron-left" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+                </button>
+                <button onclick="nextHomeSlide()" class="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-slate-900/35 hover:bg-cyan-600 hover:scale-105 text-white flex items-center justify-center transition-all z-20 shadow-md">
+                    <i data-lucide="chevron-right" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+                </button>
+                <!-- Indicators -->
+                <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2 z-20">
+                    <button onclick="setHomeSlide(0)" id="home-indicator-0" class="w-8 h-2 rounded-full bg-white transition-all duration-300 shadow-sm"></button>
+                    <button onclick="setHomeSlide(1)" id="home-indicator-1" class="w-2 h-2 rounded-full bg-white/50 transition-all duration-300 shadow-sm"></button>
+                    <button onclick="setHomeSlide(2)" id="home-indicator-2" class="w-2 h-2 rounded-full bg-white/50 transition-all duration-300 shadow-sm"></button>
+                </div>
+            </div>
+
             <!-- Fujiwa Premium Banner conforming fully to image_bbc80f.jpg layout -->
             <div class="relative w-full overflow-hidden bg-gradient-to-r from-[#0d6db1] via-[#0b5f9d] to-[#044c7a] py-12 sm:py-16 md:py-24">
                 
@@ -840,7 +872,7 @@
             </div>
         </section>
 
-            <!-- EXTRA 6. TRUYỀN THÔNG VIEW (MEDIA) -->
+         <!-- EXTRA 6. TRUYỀN THÔNG VIEW (MEDIA) -->
     <section id="view-media" class="view-panel hidden py-12">
         <div class="max-w-7xl mx-auto px-4 space-y-12">
             <div class="text-center max-w-2xl mx-auto">
@@ -954,6 +986,7 @@
             </div>
         </div>
     </section>
+
 
         <!-- EXTRA 7. KÊNH PHÂN PHỐI VIEW (DISTRIBUTION) -->
         <section id="view-distribution" class="view-panel hidden py-12">
@@ -1165,7 +1198,7 @@
     <!-- Toast popup notification container -->
     <div id="toast-container" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-[10000] space-y-2 pointer-events-none"></div>
 
-  <script>
+   <script>
         // Danh sách sản phẩm của Fujiwa, đã bổ sung thêm sản phẩm mới chuẩn và toàn bộ đã được giảm thêm 5%
         const FujiwaProducts = [
             {
@@ -1437,6 +1470,7 @@
         ];
 
 
+
         let AppState = {
             currentTab: 'home',
             cart: [],
@@ -1447,9 +1481,13 @@
             selectedVarIndex: 0
         };
 
-        // Premium Carousel Control variables
+        // Premium Product Card Carousel variables
         let currentSlideIndex = 0;
         let slideInterval;
+
+        // Home Top Widescreen Banner Carousel variables
+        let currentHomeSlideIndex = 0;
+        let homeSlideInterval;
 
         window.onload = function() {
             lucide.createIcons();
@@ -1459,6 +1497,7 @@
             updateCartUI();
             switchPage('home');
             startCarousel();
+            startHomeSlider(); // Launch home page widescreen slider!
             setupScrollReveal();
         };
 
@@ -1479,7 +1518,54 @@
             });
         }
 
-        // Carousel Core Functions
+        // Home Top Slideshow Core Functions
+        function startHomeSlider() {
+            clearInterval(homeSlideInterval);
+            showHomeSlide(currentHomeSlideIndex);
+            homeSlideInterval = setInterval(() => {
+                nextHomeSlide();
+            }, 5500); // Auto slide transition every 5.5s
+        }
+
+        function showHomeSlide(index) {
+            const slides = document.querySelectorAll('.home-slide');
+            if (slides.length === 0) return;
+
+            if (index >= slides.length) currentHomeSlideIndex = 0;
+            else if (index < 0) currentHomeSlideIndex = slides.length - 1;
+            else currentHomeSlideIndex = index;
+
+            slides.forEach((slide, i) => {
+                slide.classList.remove('opacity-100', 'z-10');
+                slide.classList.add('opacity-0', 'z-0');
+                const indicator = document.getElementById(`home-indicator-${i}`);
+                if (indicator) {
+                    indicator.className = "w-2 h-2 rounded-full bg-white/50 transition-all duration-300 shadow-sm";
+                }
+            });
+
+            slides[currentHomeSlideIndex].classList.remove('opacity-0', 'z-0');
+            slides[currentHomeSlideIndex].classList.add('opacity-100', 'z-10');
+            const activeIndicator = document.getElementById(`home-indicator-${currentHomeSlideIndex}`);
+            if (activeIndicator) {
+                activeIndicator.className = "w-8 h-2 rounded-full bg-white transition-all duration-300 shadow-sm";
+            }
+        }
+
+        function nextHomeSlide() {
+            showHomeSlide(currentHomeSlideIndex + 1);
+        }
+
+        function prevHomeSlide() {
+            showHomeSlide(currentHomeSlideIndex - 1);
+        }
+
+        function setHomeSlide(index) {
+            showHomeSlide(index);
+            startHomeSlider(); // Reset autoplay timer
+        }
+
+        // Product Card Carousel Core Functions
         function startCarousel() {
             clearInterval(slideInterval);
             slideInterval = setInterval(() => {
