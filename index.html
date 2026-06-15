@@ -6,20 +6,25 @@
     <title>Fujiwa Việt Nam - Tinh Hoa Nước Uống Từ Nhật Bản</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Google Font Inter chuẩn tiếng Việt cực đẹp -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    
     <style>
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
             scroll-behavior: smooth;
         }
-        /* Custom water bubble background animations as seen in image_1830fa.jpg */
+        /* Custom water bubble background animations */
         .bubble {
             position: absolute;
             bottom: -50px;
-            background-color: rgba(255, 255, 255, 0.15);
+            background-color: rgba(255, 255, 255, 0.12);
             border-radius: 50%;
             pointer-events: none;
             animation: rise 12s infinite ease-in-out;
@@ -27,10 +32,10 @@
         @keyframes rise {
             0% {
                 transform: translateY(0) scale(0.3) rotate(0deg);
-                opacity: 0.2;
+                opacity: 0.15;
             }
             50% {
-                opacity: 0.6;
+                opacity: 0.4;
             }
             100% {
                 transform: translateY(-110vh) scale(1.1) rotate(360deg);
@@ -43,16 +48,41 @@
             backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(0, 180, 216, 0.1);
         }
-        /* Style for product card image waves as seen in image_17da67.jpg */
+        /* Style for product card image waves */
         .wave-bg {
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%2322d3ee' fill-opacity='0.4' d='M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,149.3C672,149,768,203,864,229.3C960,256,1056,256,1152,224C1248,192,1344,128,1392,96L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
             background-size: cover;
             background-position: bottom;
         }
+        
+        /* Premium Carousel Styles inside the right card */
+        .slide-fade {
+            transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
+            opacity: 0;
+            transform: scale(0.96) translateY(5px);
+            pointer-events: none;
+        }
+        .slide-fade.active {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            pointer-events: auto;
+        }
+
+        /* Scroll Reveal Effect Styles */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
 
+    <!-- Top Bar -->
     <div class="bg-slate-100 text-[11px] text-slate-600 border-b border-slate-200 py-1.5 px-4 hidden md:block">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="flex items-center space-x-6">
@@ -74,7 +104,7 @@
 
     <header class="glass-nav sticky top-0 z-50 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-            <!-- Brand Logo chính thức được định dạng chuẩn từ link ảnh cung cấp -->
+            <!-- Brand Logo -->
             <div class="flex items-center cursor-pointer" onclick="switchPage('home')">
                 <img src="https://bizweb.dktcdn.net/100/448/480/files/fujiwa-vn-2023.jpg?v=1690960946914" alt="Fujiwa Việt Nam Logo" class="h-12 md:h-14 w-auto object-contain transition-transform hover:scale-105" onerror="this.onerror=null; this.src='https://placehold.co/150x60/ffffff/00b4d8?text=FUJIWA';">
             </div>
@@ -86,7 +116,7 @@
                 </a>
                 <a href="#" id="nav-about" onclick="switchPage('about')" class="hover:text-cyan-600 transition-colors py-2 border-b-2 border-transparent">VỀ FUJIWA</a>
                 
-                <!-- Products Menu with Dropdown feel -->
+                <!-- Products Menu with Dropdown -->
                 <div class="relative group py-2">
                     <button id="nav-products" onclick="switchPage('products')" class="hover:text-cyan-600 flex items-center space-x-1 border-b-2 border-transparent">
                         <span>SẢN PHẨM</span>
@@ -107,7 +137,7 @@
                 <a href="#" id="nav-contact" onclick="switchPage('contact')" class="hover:text-cyan-600 transition-colors py-2 border-b-2 border-transparent">LIÊN HỆ</a>
             </nav>
 
-            <!-- Right-aligned Header Actions -->
+            <!-- Actions -->
             <div class="flex items-center space-x-4">
                 <!-- Search Icon trigger -->
                 <button onclick="toggleSearchBar()" class="text-slate-600 hover:text-cyan-600 p-1.5 rounded-full hover:bg-slate-100 transition-all">
@@ -155,79 +185,174 @@
 
         <!-- 1. HOME VIEW (TRANG CHỦ) -->
         <section id="view-home" class="view-panel">
-            <!-- Hero Banner matching exact image_1830fa.jpg details with water gradient background -->
-            <div class="relative bg-gradient-to-r from-teal-500 via-cyan-600 to-blue-800 text-white overflow-hidden min-h-[580px] flex items-center justify-center px-4 py-16">
-                <!-- Water Bubbles Background Layer -->
-                <div class="absolute inset-0 pointer-events-none" id="bubbles-container"></div>
-
-                <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
-                    <!-- Text details from official photo -->
-                    <div class="lg:col-span-8 text-center lg:text-left space-y-6">
-                        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-wide uppercase text-transparent bg-clip-text bg-gradient-to-b from-white to-cyan-100 drop-shadow-md">
-                            FUJIWA – TINH HOA <br>TỪ NHẬT BẢN
-                        </h1>
-                        <p class="text-sm sm:text-base text-cyan-50/90 leading-relaxed max-w-3xl">
-                            Fujiwa Việt Nam được thành lập vào T05/2018 với tổng số tiền đầu tư ban đầu 300 tỷ VNĐ trên quy mô diện tích hơn 40.000m2. Nhà máy được lắp đặt dây chuyền sản xuất tự động Nhật Bản hiện đại.
-                        </p>
-                        <p class="text-sm sm:text-base text-cyan-50/90 leading-relaxed max-w-3xl">
-                            Fujiwa Việt Nam mong muốn kiến tạo nhiều giá trị bền vững cho cộng đồng với các sản phẩm tốt nhất cho sức khỏe từ nước I-on Kiềm cao cấp, nước giàu Hydrogen cao cấp, nước muối súc miệng I-on Fujisalt, dung dịch vệ sinh mũi I-on Fujisalt, nước xịt thơm miệng Fujisalt, nước giải rượu Fujikey, nước uống đẹp da Fujiwa Collagen, nước rửa tay diệt khuẩn dưỡng da Fujiful, dung dịch vệ sinh đa năng Fujion dành cho người Việt.
-                        </p>
-
-                        <!-- Key Pillars matching image_1830fa.jpg icons -->
-                        <div class="grid grid-cols-3 gap-4 pt-6">
-                            <div class="flex flex-col items-center text-center p-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10 hover:bg-white/15 transition-all">
-                                <div class="w-12 h-12 rounded-full bg-cyan-100 text-cyan-700 flex items-center justify-center mb-3">
-                                    <i data-lucide="award" class="w-6 h-6"></i>
-                                </div>
-                                <span class="text-[10px] md:text-xs font-bold uppercase tracking-wider">100% CÔNG NGHỆ NHẬT BẢN</span>
+            
+            <!-- Fujiwa Premium Banner conforming fully to image_bbc80f.jpg layout -->
+            <div class="relative w-full overflow-hidden bg-gradient-to-r from-[#0d6db1] via-[#0b5f9d] to-[#044c7a] py-12 sm:py-16 md:py-24">
+                
+                <!-- Water Bubbles Background Layer inside the deep blue gradient background -->
+                <div class="absolute inset-0 pointer-events-none z-10" id="bubbles-container"></div>
+                
+                <div class="max-w-7xl mx-auto px-4 md:px-8 relative z-20">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+                        
+                        <!-- Left Content Column -->
+                        <div class="lg:col-span-7 xl:col-span-8 text-white space-y-6">
+                            <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight leading-none text-white drop-shadow-sm">
+                                FUJIWA – TINH HOA <br>TỪ NHẬT BẢN
+                            </h1>
+                            
+                            <div class="space-y-4 text-xs sm:text-sm text-cyan-50/90 font-medium leading-relaxed drop-shadow-sm">
+                                <p>
+                                    Fujiwa Việt Nam được thành lập vào T05/2018 với tổng số tiền đầu tư ban đầu 300 tỷ VNĐ trên quy mô diện tích hơn 40.000m2. Nhà máy được lắp đặt dây chuyền sản xuất tự động Nhật Bản hiện đại.
+                                </p>
+                                <p>
+                                    Fujiwa Việt Nam mong muốn kiến tạo nhiều giá trị bền vững cho cộng đồng với các sản phẩm tốt nhất cho sức khỏe từ nước I-on Kiềm cao cấp, nước giàu Hydrogen cao cấp, nước muối súc miệng I-on Fujisalt, dung dịch vệ sinh mũi I-on Fujisalt, nước xịt thơm miệng Fujisalt, nước giải rượu Fujikey, nước uống đẹp da Fujiwa Collagen, nước rửa tay diệt khuẩn dưỡng da Fujiful, dung dịch vệ sinh đa năng Fujion dành cho người Việt.
+                                </p>
                             </div>
-                            <div class="flex flex-col items-center text-center p-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10 hover:bg-white/15 transition-all">
-                                <div class="w-12 h-12 rounded-full bg-cyan-100 text-cyan-700 flex items-center justify-center mb-3">
-                                    <i data-lucide="cpu" class="w-6 h-6"></i>
+
+                            <!-- 3 Pillars Boxes horizontally as in image_bbc80f.jpg -->
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
+                                <div class="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col items-center justify-center text-center space-y-2.5 hover:bg-white/10 transition-colors">
+                                    <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-cyan-200">
+                                        <i data-lucide="award" class="w-4 h-4"></i>
+                                    </div>
+                                    <span class="text-[10px] font-bold tracking-wider uppercase text-cyan-100 leading-snug">100% CÔNG NGHỆ NHẬT BẢN</span>
                                 </div>
-                                <span class="text-[10px] md:text-xs font-bold uppercase tracking-wider">CHẤT LƯỢNG VÀNG TỰ ĐỘNG HÓA</span>
+                                <div class="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col items-center justify-center text-center space-y-2.5 hover:bg-white/10 transition-colors">
+                                    <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-cyan-200">
+                                        <i data-lucide="cpu" class="w-4 h-4"></i>
+                                    </div>
+                                    <span class="text-[10px] font-bold tracking-wider uppercase text-cyan-100 leading-snug">CHẤT LƯỢNG VÀNG TỰ ĐỘNG HÓA</span>
+                                </div>
+                                <div class="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col items-center justify-center text-center space-y-2.5 hover:bg-white/10 transition-colors">
+                                    <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-cyan-200">
+                                        <i data-lucide="heart" class="w-4 h-4"></i>
+                                    </div>
+                                    <span class="text-[10px] font-bold tracking-wider uppercase text-cyan-100 leading-snug">KIẾN TẠO CỘNG ĐỒNG SỨC KHỎE</span>
+                                </div>
                             </div>
-                            <div class="flex flex-col items-center text-center p-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10 hover:bg-white/15 transition-all">
-                                <div class="w-12 h-12 rounded-full bg-cyan-100 text-cyan-700 flex items-center justify-center mb-3">
-                                    <i data-lucide="heart" class="w-6 h-6"></i>
-                                </div>
-                                <span class="text-[10px] md:text-xs font-bold uppercase tracking-wider">KIẾN TẠO CỘNG ĐỒNG SỨC KHỎE</span>
+
+                            <div class="pt-2">
+                                <button onclick="switchPage('products')" class="bg-[#00adef] hover:bg-cyan-500 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-all text-xs tracking-wider uppercase border border-cyan-300/40">
+                                    XEM SẢN PHẨM KHUYẾN MÃI
+                                </button>
                             </div>
                         </div>
 
-                        <div class="pt-6">
-                            <button onclick="switchPage('products')" class="bg-cyan-500 hover:bg-cyan-400 text-white font-bold py-3.5 px-8 rounded-full shadow-lg hover:shadow-cyan-400/20 transition-all border border-cyan-300 uppercase tracking-widest text-xs">
-                                XEM SẢN PHẨM KHUYẾN MÃI
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Premium Product Real Bottle Interactive Area (Hero Right) -->
-                    <div class="lg:col-span-4 flex justify-center relative">
-                        <div class="relative w-72 h-72 md:w-80 md:h-80 flex items-center justify-center">
-                            <div class="absolute inset-0 bg-cyan-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"></div>
-                            <div class="relative p-6 bg-white/15 backdrop-blur-md rounded-2xl border border-white/20 shadow-2xl text-center transform hover:scale-105 transition-all">
-                                <span class="bg-red-500 text-white text-[10px] font-extrabold px-3 py-1 rounded-full absolute -top-3 left-1/2 transform -translate-x-1/2 uppercase tracking-widest">Ưa chuộng nhất</span>
+                        <!-- Right Column: Glassmorphic Interactive Card with Carousel inside it as in image_bbc80f.jpg -->
+                        <div class="lg:col-span-5 xl:col-span-4 flex justify-center">
+                            <div class="relative bg-gradient-to-b from-white/15 to-white/5 backdrop-blur-xl border border-white/20 rounded-3xl p-6 shadow-2xl flex flex-col items-center justify-between w-full max-w-[340px] min-h-[460px] text-white">
                                 
-                                <!-- Premium Water Flask Real Image Render with Fallback design -->
-                                <img src="https://gaonuoc.com/wp-content/uploads/2022/10/chai-680ml-Fujiwa-2020-scaled-1.jpg" alt="Fujiwa Premium 680ml" class="w-28 h-44 object-contain mx-auto drop-shadow-2xl my-3 mix-blend-multiply" onerror="this.onerror=null; this.outerHTML=getProductSvg('alkaline-680ml');">
-                                
-                                <h3 class="font-bold text-lg text-white">Fujiwa Premium 680ml</h3>
-                                <p class="text-xs text-cyan-200">Nước uống Ion Kiềm chuẩn Nhật</p>
-                                <button onclick="handleAddToCartClick(6)" class="mt-4 bg-white text-cyan-800 font-bold px-4 py-2 rounded-lg text-xs hover:bg-cyan-50 transition-all shadow-md">Mua Ngay</button>
+                                <!-- Centered Red Badge overlapping top border -->
+                                <div class="absolute -top-3.5 left-1/2 transform -translate-x-1/2 bg-[#ef4444] text-white text-[10px] sm:text-xs font-black uppercase tracking-widest px-6 py-1.5 rounded-full shadow-lg border border-white/10 z-10 whitespace-nowrap">
+                                    ƯA CHUỘNG NHẤT
+                                </div>
+
+                                <!-- Internal Slides Container inside the right-hand card -->
+                                <div class="relative w-full flex-grow flex flex-col justify-center overflow-hidden my-6">
+                                    
+                                    <!-- Slide 1 -->
+                                    <div class="carousel-slide slide-fade active absolute inset-0 flex flex-col items-center justify-center text-center space-y-5">
+                                        <div class="bg-white p-4 rounded-2xl w-32 h-44 flex items-center justify-center shadow-lg transition-transform hover:scale-105">
+                                            <img src="https://gaonuoc.com/wp-content/uploads/2022/10/chai-680ml-Fujiwa-2020-scaled-1.jpg" alt="Fujiwa Premium 680ml" class="h-full object-contain" onerror="this.onerror=null; this.parentNode.innerHTML=getProductSvg('alkaline-450ml');">
+                                        </div>
+                                        <div class="space-y-1">
+                                            <h4 class="font-extrabold text-base sm:text-lg tracking-tight">Fujiwa Premium 680ml</h4>
+                                            <p class="text-[11px] text-cyan-200/95 font-medium">Nước uống Ion Kiềm chuẩn Nhật</p>
+                                        </div>
+                                        <button onclick="handleAddToCartClick(6)" class="bg-white hover:bg-cyan-50 text-cyan-800 font-extrabold py-2 px-6 rounded-xl hover:scale-105 transition-all text-xs shadow-md">
+                                            Mua Ngay
+                                        </button>
+                                    </div>
+
+                                    <!-- Slide 2 -->
+                                    <div class="carousel-slide slide-fade absolute inset-0 flex flex-col items-center justify-center text-center space-y-5">
+                                        <div class="bg-white p-4 rounded-2xl w-32 h-44 flex items-center justify-center shadow-lg transition-transform hover:scale-105">
+                                            <img src="https://nhathuocthanthien.com.vn/wp-content/uploads/2024/12/dgm_nttt_Dung-dich-ve-sinh-mui-Ion-muoi-Fujiwa.jpg" alt="Dung Dịch Vệ Sinh Mũi Ion Muối" class="h-full object-contain" onerror="this.onerror=null; this.parentNode.innerHTML=getProductSvg('ion-muoi');">
+                                        </div>
+                                        <div class="space-y-1">
+                                            <h4 class="font-extrabold text-base sm:text-lg tracking-tight">Vệ Sinh Mũi I-ON Muối</h4>
+                                            <p class="text-[11px] text-cyan-200/95 font-medium">Sản phẩm muối rửa mũi điện giải</p>
+                                        </div>
+                                        <button onclick="handleAddToCartClick(3)" class="bg-white hover:bg-cyan-50 text-cyan-800 font-extrabold py-2 px-6 rounded-xl hover:scale-105 transition-all text-xs shadow-md">
+                                            Mua Ngay
+                                        </button>
+                                    </div>
+
+                                    <!-- Slide 3 -->
+                                    <div class="carousel-slide slide-fade absolute inset-0 flex flex-col items-center justify-center text-center space-y-5">
+                                        <div class="bg-white p-4 rounded-2xl w-32 h-44 flex items-center justify-center shadow-lg transition-transform hover:scale-105">
+                                            <img src="https://fujiwavietnam.vn/wp-content/uploads/2025/11/1a57d2123ed64b1886f88044d18dbc4ftplv-o3syd03w52-origin-jpeg-768x768.jpeg" alt="Fujiwa Fujikey" class="h-full object-contain" onerror="this.onerror=null; this.parentNode.innerHTML=getProductSvg('fujikey');">
+                                        </div>
+                                        <div class="space-y-1">
+                                            <h4 class="font-extrabold text-base sm:text-lg tracking-tight">Nước Giải Độc Gan Fujikey</h4>
+                                            <p class="text-[11px] text-cyan-200/95 font-medium">Đẹp gan khỏe người, hộp 10 chai</p>
+                                        </div>
+                                        <button onclick="handleAddToCartClick(4)" class="bg-white hover:bg-cyan-50 text-cyan-800 font-extrabold py-2 px-6 rounded-xl hover:scale-105 transition-all text-xs shadow-md">
+                                            Mua Ngay
+                                        </button>
+                                    </div>
+
+                                </div>
+
+                                <!-- Slide Carousel Indicators inside the card bottom -->
+                                <div class="flex space-x-1.5 pb-2">
+                                    <button onclick="setSlide(0)" id="carousel-indicator-0" class="w-6 h-1.5 rounded-full bg-white transition-all duration-300"></button>
+                                    <button onclick="setSlide(1)" id="carousel-indicator-1" class="w-1.5 h-1.5 rounded-full bg-white/40 transition-all duration-300"></button>
+                                    <button onclick="setSlide(2)" id="carousel-indicator-2" class="w-1.5 h-1.5 rounded-full bg-white/40 transition-all duration-300"></button>
+                                </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
 
-            <!-- Highlights of Benefits Section -->
-            <div class="py-16 bg-white">
+            <!-- Corporate Description Block -->
+            <div class="py-12 bg-white border-b border-slate-100 reveal">
+                <div class="max-w-7xl mx-auto px-4 text-center space-y-6">
+                    <h3 class="text-cyan-600 font-extrabold text-xs uppercase tracking-widest">Sứ mệnh bền vững</h3>
+                    <h2 class="text-2xl sm:text-3xl font-black text-blue-950 leading-snug">CHUNG TAY VÌ SỨC KHỎE CỘNG ĐỒNG</h2>
+                    <p class="text-slate-600 text-sm max-w-4xl mx-auto leading-relaxed">
+                        Fujiwa Việt Nam tự hào sở hữu dây chuyền tự động hóa tinh hoa Nhật Bản, mang đến các sản phẩm vì cộng đồng: nước uống I-on Kiềm cao cấp, nước uống giàu Hydrogen chất lượng cao, nước súc họng miệng I-on Fujisalt, dung dịch xịt vệ sinh mũi súc họng tự nhiên tốt lành.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Key Pillars Indicators -->
+            <div class="py-16 bg-slate-50 reveal">
+                <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="flex flex-col items-center text-center p-6 bg-white rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                        <div class="w-16 h-16 rounded-full bg-cyan-100 text-cyan-700 flex items-center justify-center mb-4">
+                            <i data-lucide="award" class="w-8 h-8"></i>
+                        </div>
+                        <h4 class="font-bold text-lg text-blue-950 mb-2">100% CÔNG NGHỆ NHẬT BẢN</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed">Hệ thống máy điện phân, màng ngăn phân ly ion nhập khẩu trực tiếp, quản lý chuẩn chỉnh từ các chuyên gia hàng đầu Tokyo.</p>
+                    </div>
+                    <div class="flex flex-col items-center text-center p-6 bg-white rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                        <div class="w-16 h-16 rounded-full bg-cyan-100 text-cyan-700 flex items-center justify-center mb-4">
+                            <i data-lucide="cpu" class="w-8 h-8"></i>
+                        </div>
+                        <h4 class="font-bold text-lg text-blue-950 mb-2">TỰ ĐỘNG HÓA VÀNG</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed">Quy trình sản xuất tự động khép kín hoàn toàn, vô trùng vô khuẩn, bảo toàn tuyệt đối vi chất lượng tốt nhất.</p>
+                    </div>
+                    <div class="flex flex-col items-center text-center p-6 bg-white rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                        <div class="w-16 h-16 rounded-full bg-cyan-100 text-cyan-700 flex items-center justify-center mb-4">
+                            <i data-lucide="heart" class="w-8 h-8"></i>
+                        </div>
+                        <h4 class="font-bold text-lg text-blue-950 mb-2">KIẾN TẠO SỨC KHỎE</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed">Đồng hành trong cuộc sống gia đình người Việt giúp phòng bệnh trào ngược dạ dày, cân bằng pH cơ thể.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Health Benefits Section -->
+            <div class="py-16 bg-white reveal">
                 <div class="max-w-7xl mx-auto px-4">
                     <div class="text-center max-w-3xl mx-auto mb-16">
                         <span class="text-red-500 font-bold text-xs uppercase tracking-wider">Đặc Quyền Sức Khỏe</span>
                         <h2 class="text-3xl font-extrabold text-blue-900 mt-2">Tại Sao Nên Chọn Nước Ion Kiềm Fujiwa?</h2>
-                        <p class="text-slate-500 mt-3 text-sm">Cung cấp giải pháp nước sạch, nước khỏe từ gốc, giúp trẻ hóa cơ thể, tăng sức đề kháng.</p>
+                        <p class="text-slate-500 mt-3 text-sm">Cung cấp giải pháp nước sạch, nước khỏe từ gốc, giúp trẻ hóa cơ thể, tăng sức kháng khuẩn tự nhiên.</p>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -235,8 +360,8 @@
                             <div class="w-12 h-12 rounded-xl bg-cyan-600 text-white flex items-center justify-center mb-4 shadow-md group-hover:scale-110 transition-transform">
                                 <i data-lucide="droplet" class="w-6 h-6"></i>
                             </div>
-                            <h3 class="font-bold text-lg text-blue-900 mb-2">Độ Kiềm Tự Nhiên pH 8.5 - 9.5</h3>
-                            <p class="text-sm text-slate-600 leading-relaxed">Giúp trung hòa lượng axit dư thừa trong cơ thể, hỗ trợ đắc lực hệ tiêu hóa, giảm trào ngược dạ dày.</p>
+                            <h3 class="font-bold text-lg text-blue-900 mb-2">Độ Kiềm pH 8.5 - 9.5</h3>
+                            <p class="text-sm text-slate-600 leading-relaxed">Trung hòa dư lượng axit thừa tích tụ do thực phẩm dầu mỡ, hỗ trợ tiêu hóa trào ngược.</p>
                         </div>
 
                         <div class="bg-cyan-50/50 p-6 rounded-2xl border border-cyan-100 hover:shadow-xl transition-all group">
@@ -244,7 +369,7 @@
                                 <i data-lucide="sparkles" class="w-6 h-6"></i>
                             </div>
                             <h3 class="font-bold text-lg text-blue-900 mb-2">Chống Oxy Hóa Mạnh</h3>
-                            <p class="text-sm text-slate-600 leading-relaxed">Chứa dồi dào Hydro hoạt tính giúp loại bỏ các gốc tự do có hại, chống lão hóa, giữ làn da trẻ đẹp.</p>
+                            <p class="text-sm text-slate-600 leading-relaxed">Chứa nhiều khí Hydrogen hoạt tính siêu nhỏ dồi dào, hỗ trợ đẩy lùi lão hóa, trẻ hóa tế bào.</p>
                         </div>
 
                         <div class="bg-cyan-50/50 p-6 rounded-2xl border border-cyan-100 hover:shadow-xl transition-all group">
@@ -252,7 +377,7 @@
                                 <i data-lucide="layers" class="w-6 h-6"></i>
                             </div>
                             <h3 class="font-bold text-lg text-blue-900 mb-2">Cụm Phân Tử Siêu Nhỏ</h3>
-                            <p class="text-sm text-slate-600 leading-relaxed">Cụm phân tử nước chỉ bằng 1/2 nước thường giúp thẩm thấu siêu tốc, thải độc tố, bù nước nhanh hơn gấp 5 lần.</p>
+                            <p class="text-sm text-slate-600 leading-relaxed">Cấu trúc phân tử bằng 1/2 nước lọc thông thường giúp bù điện giải cấp tốc, thải độc tố nhanh gấp 5 lần.</p>
                         </div>
 
                         <div class="bg-cyan-50/50 p-6 rounded-2xl border border-cyan-100 hover:shadow-xl transition-all group">
@@ -260,19 +385,19 @@
                                 <i data-lucide="activity" class="w-6 h-6"></i>
                             </div>
                             <h3 class="font-bold text-lg text-blue-900 mb-2">Khoáng Chất Tự Nhiên</h3>
-                            <p class="text-sm text-slate-600 leading-relaxed">Bổ sung vi khoáng Ca2+, Mg2+, Na+, K+ chất lượng với hàm lượng vừa phải, nuôi dưỡng xương chắc khỏe.</p>
+                            <p class="text-sm text-slate-600 leading-relaxed">Bổ sung vi khoáng Ca2+, Mg2+, Na+, K+ tinh khiết cân bằng giúp cơ thể dẻo dai khỏe mạnh bền bỉ.</p>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Featured Products Preview Slider -->
-            <div class="py-16 bg-slate-50 border-t border-slate-100">
+            <div class="py-16 bg-slate-50 border-t border-slate-100 reveal">
                 <div class="max-w-7xl mx-auto px-4">
                     <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
                         <div>
                             <span class="text-red-500 font-bold text-xs uppercase tracking-wider">Bộ sưu tập chính hãng</span>
-                            <h2 class="text-3xl font-extrabold text-blue-900 mt-1">Sản phẩm khuyến mãi sốc như hình</h2>
+                            <h2 class="text-3xl font-extrabold text-blue-900 mt-1">Sản phẩm khuyến mãi nổi bật</h2>
                         </div>
                         <button onclick="switchPage('products')" class="mt-4 md:mt-0 flex items-center text-cyan-600 hover:text-cyan-700 font-bold text-sm">
                             Xem toàn bộ cửa hàng <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
@@ -287,7 +412,7 @@
             </div>
 
             <!-- Video Section / Call to Action -->
-            <div class="py-16 bg-gradient-to-br from-blue-900 to-slate-900 text-white relative overflow-hidden">
+            <div class="py-16 bg-gradient-to-br from-blue-900 to-slate-900 text-white relative overflow-hidden reveal">
                 <div class="max-w-5xl mx-auto px-4 text-center space-y-8 relative z-10">
                     <h2 class="text-3xl md:text-4xl font-extrabold">Trải Nghiệm Nhà Máy Sản Xuất Fujiwa Đạt Chuẩn GMP</h2>
                     <p class="text-slate-300 max-w-2xl mx-auto text-sm leading-relaxed">
@@ -309,14 +434,14 @@
         <section id="view-about" class="view-panel hidden py-12">
             <div class="max-w-7xl mx-auto px-4 space-y-16">
                 <!-- Top intro -->
-                <div class="text-center max-w-3xl mx-auto">
+                <div class="text-center max-w-3xl mx-auto reveal">
                     <span class="text-red-500 font-bold text-xs uppercase tracking-wider">VỀ CHÚNG TÔI</span>
                     <h1 class="text-3xl md:text-4xl font-extrabold text-blue-900 mt-2">CÔNG TY TNHH FUJIWA VIỆT NAM</h1>
                     <p class="text-slate-500 mt-3 text-sm">Với phương châm “Chung tay vì sức khỏe cộng đồng”, FUJIWA VIETNAM mong muốn kiến tạo nhiều giá trị bền vững cho cộng đồng với các sản phẩm tốt nhất cho sức khỏe</p>
                 </div>
 
                 <!-- Two columns details -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center reveal">
                     <div class="space-y-6">
                         <h3 class="text-2xl font-bold text-blue-950">Câu chuyện thành lập & Tầm nhìn công nghệ</h3>
                         <p class="text-slate-600 leading-relaxed text-sm">
@@ -336,7 +461,7 @@
                 </div>
 
                 <!-- Core Values & Business Philosophy Grid -->
-                <div class="bg-gradient-to-br from-cyan-50 to-slate-100 rounded-3xl p-8 border border-cyan-100 shadow-sm space-y-12">
+                <div class="bg-gradient-to-br from-cyan-50 to-slate-100 rounded-3xl p-8 border border-cyan-100 shadow-sm space-y-12 reveal">
                     <div class="text-center max-w-2xl mx-auto">
                         <span class="text-cyan-600 font-extrabold text-xs uppercase tracking-wider">Nguyên Tắc Hành Động</span>
                         <h3 class="text-2xl font-extrabold text-blue-900 mt-1">6 GIÁ TRỊ CỐT LÕI</h3>
@@ -354,31 +479,31 @@
                         <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between">
                             <div>
                                 <span class="text-3xl font-black text-cyan-600/30 block mb-2">02</span>
-                                <p class="text-slate-700 text-sm leading-relaxed">Cam kết tuân thủ pháp luật, các quy tắc ứng xử &amp; các quy định của nhà nước.</p>
+                                <p class="text-slate-700 text-sm leading-relaxed">Luôn đảm bảo chuẩn chỉnh các thông số chất lượng nguồn nước theo công nghệ y tế chuẩn Nhật Bản.</p>
                             </div>
                         </div>
                         <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between">
                             <div>
                                 <span class="text-3xl font-black text-cyan-600/30 block mb-2">03</span>
-                                <p class="text-slate-700 text-sm leading-relaxed">Cam kết tuân thủ pháp luật, các quy tắc ứng xử &amp; các quy định của nhà nước.</p>
+                                <p class="text-slate-700 text-sm leading-relaxed">Tôn trọng quyền lợi của khách hàng thông qua chính sách minh bạch giá cả, chất lượng phục vụ 24/7.</p>
                             </div>
                         </div>
                         <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between">
                             <div>
                                 <span class="text-3xl font-black text-cyan-600/30 block mb-2">04</span>
-                                <p class="text-slate-700 text-sm leading-relaxed">Cam kết tuân thủ pháp luật, các quy tắc ứng xử &amp; các quy định của nhà nước.</p>
+                                <p class="text-slate-700 text-sm leading-relaxed">Hướng tới môi trường bằng việc ứng dụng bao bì xanh, công nghệ tái tạo bền vững.</p>
                             </div>
                         </div>
                         <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between">
                             <div>
                                 <span class="text-3xl font-black text-cyan-600/30 block mb-2">05</span>
-                                <p class="text-slate-700 text-sm leading-relaxed">Cam kết tuân thủ pháp luật, các quy tắc ứng xử &amp; các quy định của nhà nước.</p>
+                                <p class="text-slate-700 text-sm leading-relaxed">Không ngừng sáng tạo cải tiến nâng tầm vi khoáng chất lượng trong từng giọt nước mát thơm lành.</p>
                             </div>
                         </div>
                         <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between">
                             <div>
                                 <span class="text-3xl font-black text-cyan-600/30 block mb-2">06</span>
-                                <p class="text-slate-700 text-sm leading-relaxed">Cam kết tuân thủ pháp luật, các quy tắc ứng xử &amp; các quy định của nhà nước.</p>
+                                <p class="text-slate-700 text-sm leading-relaxed">Cam kết chung tay tài trợ, tổ chức các hoạt động an sinh phúc lợi cộng đồng trên toàn quốc.</p>
                             </div>
                         </div>
                     </div>
@@ -394,7 +519,7 @@
                 </div>
 
                 <!-- Interactive pH Level Health Meter -->
-                <div class="bg-blue-900/5 rounded-3xl p-8 border border-blue-900/10 shadow-sm">
+                <div class="bg-blue-900/5 rounded-3xl p-8 border border-blue-900/10 shadow-sm reveal">
                     <div class="text-center max-w-2xl mx-auto mb-8">
                         <h3 class="text-2xl font-extrabold text-blue-900">Khám Phá Biểu Đồ pH Và Công Năng</h3>
                         <p class="text-xs text-slate-500 mt-1">Chọn từng nấc thang pH để khám phá tác dụng thần kỳ của nước Ion Kiềm đối với cơ thể bạn.</p>
@@ -437,7 +562,7 @@
                 </div>
 
                 <!-- Quality Certificates & Official Award Description -->
-                <div>
+                <div class="reveal">
                     <h3 class="text-2xl font-extrabold text-blue-900 text-center mb-4">Chứng Nhận & Giải Thưởng Đạt Được</h3>
                     <p class="text-slate-600 text-sm text-center max-w-3xl mx-auto mb-10 leading-relaxed">
                         Với một sứ mệnh "Chung tay vì sức khỏe cộng đồng", FUJIWA VIETNAM không chỉ đưa ra thị trường những sản phẩm chất lượng cao bảo vệ sức khỏe, nâng cao đời sống của người tiêu dùng, tinh thần hoạt động thiện nguyện lan tỏa nguồn sống tích cực cho cộng đồng.
@@ -473,7 +598,7 @@
         <!-- 3. PRODUCTS CATALOG VIEW (SẢN PHẨM) -->
         <section id="view-products" class="view-panel hidden py-12">
             <div class="max-w-7xl mx-auto px-4">
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 reveal">
                     <div>
                         <span class="text-red-500 font-bold text-xs uppercase tracking-wider">Cửa Hàng Trực Tuyến</span>
                         <h1 class="text-3xl font-extrabold text-blue-900 mt-1">Danh Mục Sản Phẩm Chính Hãng</h1>
@@ -492,9 +617,9 @@
                 </div>
 
                 <!-- Products filter stats & sorting option exactly as shown in image_17da67.jpg -->
-                <div class="flex items-center justify-between border-t border-b border-slate-200 py-4 mb-8">
+                <div class="flex items-center justify-between border-t border-b border-slate-200 py-4 mb-8 reveal">
                     <div class="text-slate-600 text-sm font-semibold">
-                        <span id="results-count">16</span> kết quả
+                        <span id="results-count">20</span> kết quả
                     </div>
                     <div class="flex items-center space-x-2">
                         <span class="text-xs text-slate-400 font-medium hidden sm:inline">Sắp xếp:</span>
@@ -508,19 +633,19 @@
                 </div>
 
                 <!-- Products Grid Display matching exact styling of image_17da67.jpg -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12" id="products-catalog-container">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12 reveal" id="products-catalog-container">
                     <!-- Loaded dynamically via JS -->
                 </div>
             </div>
         </section>
 
-        <!-- 4. CONTACT VIEW (LIÊN HỆ) -->
+        <!-- 4. CONTACT VIEW (LIÊN HỆ) - Cấu hình hoàn chỉnh thông số chuẩn xác như trong ảnh image_bca1ff.jpg -->
         <section id="view-contact" class="view-panel hidden py-16 bg-gradient-to-tr from-cyan-50/20 via-white to-blue-50/20">
             <div class="max-w-7xl mx-auto px-4 md:px-8">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                     
                     <!-- Left Contact Info Details Block from image_bca1ff.jpg -->
-                    <div class="lg:col-span-5 space-y-6">
+                    <div class="lg:col-span-5 space-y-6 reveal">
                         <span class="text-cyan-500 font-bold text-xs tracking-widest block uppercase">LIÊN HỆ CHÚNG TÔI</span>
                         <h1 class="text-3xl md:text-4xl font-extrabold text-blue-900 leading-tight">
                             CÔNG TY TNHH<br>FUJIWA VIỆT NAM
@@ -528,19 +653,19 @@
                         
                         <div class="space-y-4 text-slate-600 text-sm md:text-base">
                             <p class="leading-relaxed">
-                                <strong class="text-slate-800 font-bold">VP Chi Nhánh:</strong> 121/32 Đường Trung Mỹ Tây 13 (Phan Văn Hùm), P. Trung Mỹ Tây, TP. Hồ Chí Minh
+                                <strong class="text-slate-800 font-semibold">VP Chi Nhánh:</strong> 121/32 Đường Trung Mỹ Tây 13 (Phan Văn Hùm), P. Trung Mỹ Tây, TP. Hồ Chí Minh
                             </p>
                             <p class="leading-relaxed">
-                                <strong class="text-slate-800 font-bold">Nhà máy:</strong> Nhà máy Fujiwa – 286 Hồ Văn Tắng, Ấp Phú Lợi, Xã Củ Chi, Tp. Hồ Chí Minh
+                                <strong class="text-slate-800 font-semibold">Nhà máy:</strong> Nhà máy Fujiwa – 286 Hồ Văn Tắng, Ấp Phú Lợi, Xã Củ Chi, Tp. Hồ Chí Minh
                             </p>
                             <p class="leading-relaxed">
-                                <strong class="text-slate-800 font-bold">Hotline:</strong> 19006759 – 0901 661 789
+                                <strong class="text-slate-800 font-semibold">Hotline:</strong> 19006759 – 0901 661 789
                             </p>
                             <p class="leading-relaxed">
-                                <strong class="text-slate-800 font-bold">Email:</strong> 8462D5@fujiwavietnam.vn
+                                <strong class="text-slate-800 font-semibold">Email:</strong> 8462D5@fujiwavietnam.vn
                             </p>
                             <p class="leading-relaxed">
-                                <strong class="text-slate-800 font-bold">MST:</strong> 0315058035
+                                <strong class="text-slate-800 font-semibold">MST:</strong> 0315058035
                             </p>
                         </div>
 
@@ -556,11 +681,11 @@
                                     <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.17-2.89-.6-4.09-1.47-.72-.52-1.32-1.2-1.78-1.97-.05 1.95-.02 3.91-.03 5.86 0 1.34-.23 2.72-.85 3.91-.65 1.32-1.8 2.45-3.17 3.05-1.57.71-3.41.87-5.06.41-1.71-.46-3.27-1.59-4.25-3.08-1.12-1.64-1.54-3.75-1.2-5.71.32-1.93 1.41-3.74 3.05-4.82 1.53-1 3.42-1.39 5.21-.99.11-1.45.05-2.91.07-4.36 0-1.02-.01-2.03.01-3.05zm-.15 7.15c-1 .04-2.02.43-2.73 1.15-.79.77-1.15 1.93-1.01 3.02.13 1.09.83 2.08 1.83 2.53.94.43 2.07.34 2.94-.23.86-.54 1.39-1.53 1.43-2.54.04-1.35.01-2.7.02-4.04-.5-.35-1.09-.64-1.72-.79-.24-.05-.5-.09-.76-.1z"/>
                                 </svg>
                             </a>
-                            <!-- Zalo (blue with Z) -->
+                            <!-- Zalo -->
                             <a href="#" class="w-10 h-10 rounded-full bg-cyan-600 text-white flex items-center justify-center hover:scale-110 transition-transform shadow-sm font-black text-base italic">
                                 Z
                             </a>
-                            <!-- Instagram (gradient orange/pink) -->
+                            <!-- Instagram -->
                             <a href="#" class="w-10 h-10 rounded-full bg-gradient-to-tr from-amber-500 via-pink-500 to-purple-600 text-white flex items-center justify-center hover:scale-110 transition-transform shadow-sm">
                                 <i data-lucide="instagram" class="w-5 h-5"></i>
                             </a>
@@ -580,7 +705,7 @@
                     </div>
 
                     <!-- Right Contact Form "Để lại thông tin" from image_bca1ff.jpg -->
-                    <div class="lg:col-span-7 bg-white p-6 md:p-10 rounded-3xl border border-slate-100 shadow-xl space-y-6">
+                    <div class="lg:col-span-7 bg-white p-6 md:p-10 rounded-3xl border border-slate-100 shadow-xl space-y-6 reveal">
                         <div>
                             <h3 class="text-2xl md:text-3xl font-extrabold text-blue-950">Để lại thông tin</h3>
                             <p class="text-slate-500 text-sm mt-2 leading-relaxed">
@@ -701,20 +826,21 @@
                 </div>
 
                 <!-- Empty Cart State -->
-        <div class="hidden text-center py-16 space-y-4" id="empty-cart-state">
-            <div class="w-20 h-20 rounded-full bg-cyan-50 text-cyan-500 flex items-center justify-center mx-auto">
-                <i data-lucide="shopping-cart" class="w-10 h-10"></i>
+                <div class="hidden text-center py-16 space-y-4" id="empty-cart-state">
+                    <div class="w-20 h-20 rounded-full bg-cyan-50 text-cyan-500 flex items-center justify-center mx-auto">
+                        <i data-lucide="shopping-cart" class="w-10 h-10"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-blue-950">Giỏ hàng của bạn đang trống</h2>
+                    <p class="text-slate-500 text-sm">Hãy tham quan cửa hàng Fujiwa của chúng tôi và lựa chọn những nguồn nước tốt lành nhé.</p>
+                    <button onclick="switchPage('products')" class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-8 rounded-full shadow-md transition-all inline-flex items-center space-x-2">
+                        <span>Tiếp Tục Mua Sắm</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
             </div>
-            <h2 class="text-2xl font-bold text-blue-950">Giỏ hàng của bạn đang trống</h2>
-            <p class="text-slate-500 text-sm">Hãy tham quan cửa hàng Fujiwa của chúng tôi và lựa chọn những nguồn nước tốt lành nhé.</p>
-            <button onclick="switchPage('products')" class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-8 rounded-full shadow-md transition-all inline-flex items-center space-x-2">
-                <span>Tiếp Tục Mua Sắm</span>
-                <i data-lucide="arrow-right" class="w-4 h-4"></i>
-            </button>
-        </div>
-    </section>
+        </section>
 
-    <!-- EXTRA 6. TRUYỀN THÔNG VIEW (MEDIA) -->
+            <!-- EXTRA 6. TRUYỀN THÔNG VIEW (MEDIA) -->
     <section id="view-media" class="view-panel hidden py-12">
         <div class="max-w-7xl mx-auto px-4 space-y-12">
             <div class="text-center max-w-2xl mx-auto">
@@ -829,17 +955,17 @@
         </div>
     </section>
 
-    <!-- EXTRA 7. KÊNH PHÂN PHỐI VIEW (DISTRIBUTION) -->
-    <section id="view-distribution" class="view-panel hidden py-12">
+        <!-- EXTRA 7. KÊNH PHÂN PHỐI VIEW (DISTRIBUTION) -->
+        <section id="view-distribution" class="view-panel hidden py-12">
             <div class="max-w-7xl mx-auto px-4 space-y-12">
-                <div class="text-center max-w-2xl mx-auto">
+                <div class="text-center max-w-2xl mx-auto reveal">
                     <span class="text-red-500 font-bold text-xs uppercase tracking-wider">Hệ Thống Đại Lý Toàn Quốc</span>
                     <h1 class="text-3xl font-extrabold text-blue-900 mt-1">Kênh Phân Phối Fujiwa</h1>
                     <p class="text-slate-500 mt-2 text-sm">Tìm kiếm đại lý phân phối, siêu thị, nhà thuốc cung cấp nước sạch Fujiwa gần bạn nhất.</p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div class="p-6 bg-white rounded-2xl border border-slate-100 text-center shadow-sm">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 reveal">
+                    <div class="p-6 bg-white rounded-2xl border border-slate-100 text-center shadow-sm hover:shadow-md transition-all">
                         <div class="w-12 h-12 bg-cyan-100 text-cyan-600 rounded-full flex items-center justify-center mx-auto mb-4">
                             <i data-lucide="shopping-bag" class="w-6 h-6"></i>
                         </div>
@@ -847,7 +973,7 @@
                         <p class="text-xs text-slate-500 mt-1">Co.op Mart, WinMart, Bach Hoa Xanh, Circle K</p>
                     </div>
 
-                    <div class="p-6 bg-white rounded-2xl border border-slate-100 text-center shadow-sm">
+                    <div class="p-6 bg-white rounded-2xl border border-slate-100 text-center shadow-sm hover:shadow-md transition-all">
                         <div class="w-12 h-12 bg-cyan-100 text-cyan-600 rounded-full flex items-center justify-center mx-auto mb-4">
                             <i data-lucide="shield-alert" class="w-6 h-6"></i>
                         </div>
@@ -855,7 +981,7 @@
                         <p class="text-xs text-slate-500 mt-1">Pharmacity, Long Châu, An Khang, Viện Y Học Cổ Truyền</p>
                     </div>
 
-                    <div class="p-6 bg-white rounded-2xl border border-slate-100 text-center shadow-sm">
+                    <div class="p-6 bg-white rounded-2xl border border-slate-100 text-center shadow-sm hover:shadow-md transition-all">
                         <div class="w-12 h-12 bg-cyan-100 text-cyan-600 rounded-full flex items-center justify-center mx-auto mb-4">
                             <i data-lucide="store" class="w-6 h-6"></i>
                         </div>
@@ -863,7 +989,7 @@
                         <p class="text-xs text-slate-500 mt-1">Có mặt tại 63 tỉnh thành, các cơ sở sầm uất Hà Nội, Đà Nẵng, TP.HCM</p>
                     </div>
 
-                    <div class="p-6 bg-white rounded-2xl border border-slate-100 text-center shadow-sm">
+                    <div class="p-6 bg-white rounded-2xl border border-slate-100 text-center shadow-sm hover:shadow-md transition-all">
                         <div class="w-12 h-12 bg-cyan-100 text-cyan-600 rounded-full flex items-center justify-center mx-auto mb-4">
                             <i data-lucide="users" class="w-6 h-6"></i>
                         </div>
@@ -995,32 +1121,32 @@
         </div>
     </div>
 
-    <!-- Right Flashing Floaters inspired directly by image_1830fa.jpg and image_17da67.jpg -->
+    <!-- Right Flashing Floaters inspired directly by image_1830fa.jpg, image_17da67.jpg and image_bca1ff.jpg -->
     <div class="fixed right-6 bottom-6 flex flex-col space-y-3 z-[999]">
         <!-- Contact widget container -->
         <div id="contact-widget" class="flex flex-col space-y-3 items-end transition-all duration-300">
             <!-- Zalo -->
             <a href="https://zalo.me/0901661789" target="_blank" class="flex items-center space-x-2 bg-white px-3 py-2 rounded-full shadow-lg border border-cyan-100 hover:scale-105 transition-all group">
-                <span class="text-xs font-bold text-blue-800 hidden md:block">Nhắn tin Zalo</span>
-                <span class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-black shadow-md text-sm">Zalo</span>
+                <span class="text-xs font-bold text-slate-700 hidden md:block">Nhắn tin Zalo</span>
+                <span class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-black shadow-md text-xs">Zalo</span>
             </a>
-            <!-- Email (Đổi email theo yêu cầu) -->
+            <!-- Email -->
             <a href="mailto:8462D5@fujiwavietnam.vn" class="flex items-center space-x-2 bg-white px-3 py-2 rounded-full shadow-lg border border-cyan-100 hover:scale-105 transition-all group">
-                <span class="text-xs font-bold text-orange-600 hidden md:block">8462D5@fujiwavietnam.vn</span>
+                <span class="text-xs font-bold text-slate-700 hidden md:block">8462D5@fujiwavietnam.vn</span>
                 <div class="w-10 h-10 rounded-full bg-orange-500 text-white flex items-center justify-center shadow-md">
                     <i data-lucide="mail" class="w-5 h-5"></i>
                 </div>
             </a>
-            <!-- Hotline (Đổi hotline theo yêu cầu) -->
+            <!-- Hotline -->
             <a href="tel:19006759" class="flex items-center space-x-2 bg-white px-3 py-2 rounded-full shadow-lg border border-cyan-100 hover:scale-105 transition-all group">
-                <span class="text-xs font-bold text-emerald-600 hidden md:block">1900 8462</span>
+                <span class="text-xs font-bold text-slate-700 hidden md:block">1900 8462</span>
                 <div class="w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-md animate-bounce">
                     <i data-lucide="phone-call" class="w-5 h-5"></i>
                 </div>
             </a>
         </div>
         <!-- Close / Open Widget controller -->
-        <button onclick="toggleContactWidget()" id="widget-toggle" class="self-end w-12 h-12 rounded-full bg-red-500 text-white flex items-center justify-center shadow-lg hover:bg-red-600 transition-all">
+        <button onclick="toggleContactWidget()" id="widget-toggle" class="self-end w-12 h-12 rounded-full bg-[#ef4444] text-white flex items-center justify-center shadow-lg hover:bg-red-600 transition-all">
             <i data-lucide="x" class="w-6 h-6"></i>
         </button>
     </div>
@@ -1039,7 +1165,7 @@
     <!-- Toast popup notification container -->
     <div id="toast-container" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-[10000] space-y-2 pointer-events-none"></div>
 
-    <script>
+  <script>
         // Danh sách sản phẩm của Fujiwa, đã bổ sung thêm sản phẩm mới chuẩn và toàn bộ đã được giảm thêm 5%
         const FujiwaProducts = [
             {
@@ -1105,7 +1231,7 @@
                 price: 61750, // 65000 * 0.95
                 originalPrice: 85000,
                 isRange: false,
-                discount: "-27%",
+                discount: "-5%",
                 category: "alkaline",
                 tag: "Bình Gia Đình",
                 desc: "Thích hợp dùng cho cơ quan, hộ gia đình uống trực tiếp để bảo vệ và chăm sóc sức khỏe hàng ngày.",
@@ -1310,6 +1436,7 @@
             }
         ];
 
+
         let AppState = {
             currentTab: 'home',
             cart: [],
@@ -1320,6 +1447,10 @@
             selectedVarIndex: 0
         };
 
+        // Premium Carousel Control variables
+        let currentSlideIndex = 0;
+        let slideInterval;
+
         window.onload = function() {
             lucide.createIcons();
             generateBubbles();
@@ -1327,7 +1458,70 @@
             renderProductsCatalog();
             updateCartUI();
             switchPage('home');
+            startCarousel();
+            setupScrollReveal();
         };
+
+        // Scroll Reveal Implementation using IntersectionObserver
+        function setupScrollReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            document.querySelectorAll('.reveal').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // Carousel Core Functions
+        function startCarousel() {
+            clearInterval(slideInterval);
+            slideInterval = setInterval(() => {
+                nextSlide();
+            }, 4500);
+        }
+
+        function showSlide(index) {
+            const slides = document.querySelectorAll('.carousel-slide');
+            if (slides.length === 0) return;
+            
+            if (index >= slides.length) currentSlideIndex = 0;
+            else if (index < 0) currentSlideIndex = slides.length - 1;
+            else currentSlideIndex = index;
+
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                const indicator = document.getElementById(`carousel-indicator-${i}`);
+                if (indicator) {
+                    indicator.className = "w-1.5 h-1.5 rounded-full bg-white/40 transition-all duration-300";
+                }
+            });
+
+            slides[currentSlideIndex].classList.add('active');
+            const activeIndicator = document.getElementById(`carousel-indicator-${currentSlideIndex}`);
+            if (activeIndicator) {
+                activeIndicator.className = "w-6 h-1.5 rounded-full bg-white transition-all duration-300";
+            }
+        }
+
+        function nextSlide() {
+            showSlide(currentSlideIndex + 1);
+        }
+
+        function prevSlide() {
+            showSlide(currentSlideIndex - 1);
+        }
+
+        function setSlide(index) {
+            showSlide(index);
+            startCarousel(); // Reset timer on click
+        }
 
         function generateBubbles() {
             const container = document.getElementById('bubbles-container');
@@ -1358,7 +1552,7 @@
                 targetPanel.classList.remove('hidden');
             }
 
-            document.querySelectorAll('nav a, nav button').forEach(el => {
+            document.querySelectorAll('nav a, nav text').forEach(el => {
                 el.classList.remove('text-cyan-600', 'border-cyan-500');
                 el.classList.add('text-slate-700', 'border-transparent');
             });
@@ -1375,6 +1569,16 @@
             }
 
             document.getElementById('mobile-menu').classList.add('hidden');
+            
+            // Re-trigger visual layout updates
+            setTimeout(() => {
+                document.querySelectorAll('.reveal').forEach(el => {
+                    const rect = el.getBoundingClientRect();
+                    if(rect.top < window.innerHeight) {
+                        el.classList.add('active');
+                    }
+                });
+            }, 100);
         }
 
         function toggleSearchBar() {
@@ -1571,7 +1775,6 @@
             }
         }
 
-        // Đảm bảo hàm JavaScript thay thế trực tiếp thẻ <img> bị lỗi thành chuỗi SVG vector sắc nét
         function getProductImageHtml(prod) {
             if (prod.imageUrl && prod.imageUrl.trim() !== "") {
                 return `
@@ -1586,7 +1789,6 @@
             if (!featuredContainer) return;
             featuredContainer.innerHTML = '';
 
-            // Render top products matching image
             FujiwaProducts.slice(4, 8).forEach(prod => {
                 featuredContainer.appendChild(createExactProductCard(prod));
             });
@@ -1640,7 +1842,6 @@
             lucide.createIcons();
         }
 
-        // Exact Product Card Factory matching the style in image_17da67.jpg
         function createExactProductCard(prod) {
             const card = document.createElement('div');
             card.className = "flex flex-col transition-all duration-300 hover:scale-[1.01]";
@@ -1665,24 +1866,16 @@
             }
 
             card.innerHTML = `
-                <!-- Image Wrapper matching image_17da67.jpg outer border design and wave decorative background -->
-                <div class="relative bg-white border-2 border-cyan-400 aspect-square p-6 flex items-center justify-center overflow-hidden">
-                    
-                    <!-- Orange discount circular badge overlapping top-left corner -->
+                <div class="relative bg-white border-2 border-cyan-400 aspect-square p-6 flex items-center justify-center overflow-hidden rounded-xl">
                     <span class="absolute -top-1 -left-1 w-10 h-10 rounded-full bg-orange-600/95 text-white font-extrabold flex items-center justify-center text-[11px] shadow-md z-10">
                         ${prod.discount}
                     </span>
-
-                    <!-- Wave decorative background underlaid -->
                     <div class="absolute bottom-0 left-0 right-0 h-10 wave-bg pointer-events-none"></div>
-
-                    <!-- Product Real Image or Vector illustration with scale zoom hover effect -->
                     <div class="relative z-10 flex items-center justify-center w-full h-full">
                         ${getProductImageHtml(prod)}
                     </div>
                 </div>
 
-                <!-- Product Text Metadata (Below Image Wrapper) -->
                 <div class="pt-3 pb-4 px-2 flex flex-col items-center flex-grow justify-between">
                     <div class="text-center w-full">
                         <h4 class="font-bold text-blue-900 text-center text-xs sm:text-sm md:text-base leading-snug hover:text-cyan-600 cursor-pointer transition-colors line-clamp-2 px-1 min-h-[44px]">
@@ -1691,7 +1884,6 @@
                         ${priceSection}
                     </div>
 
-                    <!-- Interactive add to cart trigger with unified aesthetics -->
                     <button onclick="handleAddToCartClick(${prod.id})" class="mt-4 bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-5 rounded-full text-[11px] sm:text-xs transition-all flex items-center justify-center space-x-1.5 shadow-sm">
                         <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
                         <span>Mua Ngay</span>
